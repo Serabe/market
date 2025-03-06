@@ -1,0 +1,36 @@
+name: Dialyzer
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+env:
+  MIX_ENV: test
+  elixir: 1.18.0
+  otp: 27.0
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Elixir
+        uses: ./.github/actions/setup-elixir
+        with:
+          elixir-version: ${{ env.elixir }}
+          otp-version: ${{ env.otp }}
+      - name: Retrieve PLT Cache
+        uses: actions/cache@v3
+        id: plt-cache
+        with:
+          path: priv/plts
+          key: plts-v.2-${{ runner.os }}-${{ env.otp }}-${{ env.elixir }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+      - name: Create PLTs
+        if: steps.plt-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p priv/plts
+          mix dialyzer --plt
+      - run: mix dialyzer

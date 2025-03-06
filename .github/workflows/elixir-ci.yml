@@ -1,0 +1,23 @@
+name: Elixir CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+env:
+  MIX_ENV: test
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Elixir
+        uses: ./.github/actions/setup-elixir
+      - run: mix compile --error-on-warnings
+      - run: mix test
+      - run: mix format --check-formatted
+      - run: mix credo --strict
