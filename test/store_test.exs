@@ -60,6 +60,24 @@ defmodule Market.StoreTest do
     end
   end
 
+  describe "exist_product?/2" do
+    test "returns true if the product exist in the given location" do
+      start_supervised!(Store)
+
+      Store.add_product("MAD", Product.new(sku: "NESQU1K", name: "Nesquik", prices: %{1 => 10}))
+
+      assert Store.exist_product?("MAD", "NESQU1K")
+    end
+
+    test "returns false if the product does not exist in the given location" do
+      start_supervised!(Store)
+
+      Store.add_product("MAD", Product.new(sku: "NESQU1K", name: "Nesquik", prices: %{1 => 10}))
+
+      assert not Store.exist_product?("BCN", "NESQU1K")
+    end
+  end
+
   describe "get_products/2" do
     test "with valid skus returns the products" do
       start_supervised!(Store)
