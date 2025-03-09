@@ -20,4 +20,32 @@ defmodule Market.Store.LineItemTest do
       assert line_item.quantity == 2
     end
   end
+
+  describe "add_quantity/2" do
+    test "can add any quantity" do
+      line_item = LineItem.new(product_sku: "NESQU1K", quantity: 1)
+
+      line_item = LineItem.add_quantity(line_item, 2)
+
+      assert line_item.quantity == 3
+    end
+  end
+
+  describe "remove_quantity/2" do
+    test "can remove any quantity" do
+      line_item = LineItem.new(product_sku: "NESQU1K", quantity: 3)
+
+      line_item = LineItem.remove_quantity(line_item, 1)
+
+      assert line_item.quantity == 2
+    end
+
+    test "cannot remove more than the quantity" do
+      line_item = LineItem.new(product_sku: "NESQU1K", quantity: 3)
+
+      line_item = LineItem.remove_quantity(line_item, 4)
+
+      assert line_item.quantity == 0
+    end
+  end
 end

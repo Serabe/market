@@ -43,6 +43,14 @@ defmodule Market.Store.Product do
     }
   end
 
+  @doc """
+  Returns the price for a given quantity.
+  """
+  def unit_price_for_quantity(product, quantity) do
+    price = Enum.find(product.prices, &Price.valid_for_quantity?(&1, quantity))
+    {price.value, price.currency}
+  end
+
   defp build_prices(prices) when is_map(prices) do
     prices
     |> Enum.map(fn
@@ -66,5 +74,17 @@ defmodule Market.Store.Product do
         %Price{from_quantity: from_quantity, to_quantity: to_quantity, value: value}
     end)
     |> Enum.sort_by(& &1.from_quantity)
+  end
+end
+
+defimpl Inspect, for: Market.Store.Product do
+  def inspect(product, _opts) do
+    to_string(product)
+  end
+end
+
+defimpl String.Chars, for: Market.Store.Product do
+  def to_string(product) do
+    "#{product.sku} - #{product.name}"
   end
 end

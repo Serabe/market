@@ -27,4 +27,14 @@ defmodule Market.Store.Price do
           value: non_neg_integer(),
           currency: atom()
         }
+
+  def valid_for_quantity?(%__MODULE__{from_quantity: from, to_quantity: :infty}, qty)
+      when from <= qty,
+      do: true
+
+  def valid_for_quantity?(%__MODULE__{from_quantity: from, to_quantity: to}, qty)
+      when from <= qty and qty <= to,
+      do: true
+
+  def valid_for_quantity?(%__MODULE__{}, _qty), do: false
 end

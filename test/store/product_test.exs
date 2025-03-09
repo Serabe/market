@@ -56,4 +56,30 @@ defmodule Market.Store.ProductTest do
              ]
     end
   end
+
+  describe "unit_price_for_quantity/2" do
+    test "returns the price for a given quantity when it is in a range" do
+      product =
+        Product.new(
+          sku: "NESQU1K",
+          name: "Nesquik",
+          prices: %{(1..10) => 10, (11..20) => 8, 20 => 7}
+        )
+
+      assert {10, :eur} = Product.unit_price_for_quantity(product, 5)
+      assert {8, :eur} = Product.unit_price_for_quantity(product, 15)
+    end
+
+    test "returns the price for a given quantity when it is in the final range" do
+      product =
+        Product.new(
+          sku: "NESQU1K",
+          name: "Nesquik",
+          prices: %{(1..10) => 10, (11..20) => 8, 20 => 7}
+        )
+
+      assert {7, :eur} = Product.unit_price_for_quantity(product, 55)
+      assert {7, :eur} = Product.unit_price_for_quantity(product, 165)
+    end
+  end
 end

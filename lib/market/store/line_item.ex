@@ -1,5 +1,6 @@
 defmodule Market.Store.LineItem do
   @moduledoc false
+
   defstruct [:product_sku, :quantity]
 
   @typedoc """
@@ -25,5 +26,19 @@ defmodule Market.Store.LineItem do
       product_sku: Keyword.fetch!(opts, :product_sku),
       quantity: opts[:quantity]
     }
+  end
+
+  @doc """
+  Add quantity to a line item.
+  """
+  def add_quantity(line_item, qty) do
+    %{line_item | quantity: line_item.quantity + qty}
+  end
+
+  @doc """
+  Remove quantity from a line item.
+  """
+  def remove_quantity(line_item, qty) do
+    %{line_item | quantity: max(0, line_item.quantity - qty)}
   end
 end
