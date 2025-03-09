@@ -5,14 +5,12 @@ defmodule MarketTest do
 
   setup :start_store
 
-  @tag :skip
   test "first test" do
     cart = create_cart("GR1,SR1,GR1,GR1,CF1")
 
     assert Cart.get_total_price(cart) == {2245, :gbp}
   end
 
-  @tag :skip
   test "second test" do
     cart = create_cart("GR1,GR1")
 
@@ -25,7 +23,6 @@ defmodule MarketTest do
     assert Cart.get_total_price(cart) == {1661, :gbp}
   end
 
-  @tag :skip
   test "fourth test" do
     cart = create_cart("GR1,CF1,SR1,CF1,CF1")
 

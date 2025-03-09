@@ -1,7 +1,11 @@
 defmodule Market.Store.CartTest do
   use ExUnit.Case
 
+  alias Market.Store
+  alias Market.Store.Adjustment
+  alias Market.Store.Calculator
   alias Market.Store.Cart
+  alias Market.Store.Condition
   alias Market.Store.LineItem
   alias Market.Store.Product
 
@@ -112,7 +116,7 @@ defmodule Market.Store.CartTest do
     end
 
     test "works with several items" do
-      Market.Store.add_product(
+      Store.add_product(
         "MAD",
         Product.new(sku: "SPRITE", name: "Sprite", prices: %{(1..10) => 5, 11 => 4})
       )
@@ -120,6 +124,30 @@ defmodule Market.Store.CartTest do
       cart = Cart.new() |> Cart.add_product("NESQU1K", 2) |> Cart.add_product("SPRITE", 11)
 
       assert Cart.get_total_price(cart) == {64, :eur}
+    end
+
+    test "applies adjustment if condition is satisfied" do
+      Store.add_product(
+        "MAD",
+        Product.new(sku: "SPRITE", name: "Sprite", prices: %{1 => 5})
+      )
+      Store.add_adjustment_for_product("MAD", "SPRITE", Adjustment.new(condition: Condition.new(type: :gte, value: 5), calculator: Calculator.new(type: :get_some_free, value: {5, 1})))
+
+      cart = Cart.new() |> Cart.add_product("SPRITE", 6)
+
+      assert Cart.get_total_price(cart) == {25, :eur}
+    end
+
+    test "applies adjustment if condition is satisfied and adjustment takes into account bulk prices" do
+      Store.add_product(
+        "MAD",
+        Product.new(sku: "SPRITE", name: "Sprite", prices: %{(1..4) => 5, 5 => 4})
+      )
+      Store.add_adjustment_for_product("MAD", "SPRITE", Adjustment.new(condition: Condition.new(type: :gte, value: 5), calculator: Calculator.new(type: :get_some_free, value: {5, 1})))
+
+      cart = Cart.new() |> Cart.add_product("SPRITE", 6)
+
+      assert Cart.get_total_price(cart) == {20, :eur}
     end
   end
 

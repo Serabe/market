@@ -10,6 +10,10 @@ defmodule Market.Utils.Money do
     {value * times, currency}
   end
 
+  def div({value, currency}, denominator) when denominator != 0 do
+    {Kernel.div(value, denominator), currency}
+  end
+
   @doc """
   Substract to moneys
   """

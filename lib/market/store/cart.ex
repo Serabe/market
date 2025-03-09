@@ -21,7 +21,7 @@ defmodule Market.Store.Cart do
   @type t() :: %__MODULE__{
           line_items: list(LineItem.t()),
           location_id: String.t(),
-          snapshot: list({String.t(), non_neg_integer(), non_neg_integer()})
+          snapshot: list({String.t(), non_neg_integer(), {integer(), atom()}})
         }
 
   @doc """
