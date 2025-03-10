@@ -6,11 +6,16 @@ defmodule Market.Application do
   use Application
 
   @impl true
-  def start(_type, _args) do
-    children = [
-      # Starts a worker by calling: Market.Worker.start_link(arg)
-      # {Market.Worker, arg}
-    ]
+  def start(_type, args) do
+    children =
+      if Keyword.get(args, :env, :prod) == :test do
+        []
+      else
+        [
+          # Starts a worker by calling: Market.Worker.start_link(arg)
+          {Market.Store, []}
+        ]
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
