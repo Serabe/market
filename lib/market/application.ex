@@ -6,9 +6,9 @@ defmodule Market.Application do
   use Application
 
   @impl true
-  def start(_type, _args) do
+  def start(_type, args) do
     children =
-      if Mix.env() == :test do
+      if Keyword.get(args, :env, :prod) == :test do
         []
       else
         [

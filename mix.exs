@@ -16,7 +16,7 @@ defmodule Market.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Market.Application, []}
+      mod: {Market.Application, [env: Mix.env()]}
     ]
   end
 
