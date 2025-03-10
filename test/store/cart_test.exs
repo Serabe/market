@@ -131,7 +131,15 @@ defmodule Market.Store.CartTest do
         "MAD",
         Product.new(sku: "SPRITE", name: "Sprite", prices: %{1 => 5})
       )
-      Store.add_adjustment_for_product("MAD", "SPRITE", Adjustment.new(condition: Condition.new(type: :gte, value: 5), calculator: Calculator.new(type: :get_some_free, value: {5, 1})))
+
+      Store.add_adjustment_for_product(
+        "MAD",
+        "SPRITE",
+        Adjustment.new(
+          condition: Condition.new(type: :gte, value: 5),
+          calculator: Calculator.new(type: :get_some_free, value: {5, 1})
+        )
+      )
 
       cart = Cart.new() |> Cart.add_product("SPRITE", 6)
 
@@ -143,7 +151,15 @@ defmodule Market.Store.CartTest do
         "MAD",
         Product.new(sku: "SPRITE", name: "Sprite", prices: %{(1..4) => 5, 5 => 4})
       )
-      Store.add_adjustment_for_product("MAD", "SPRITE", Adjustment.new(condition: Condition.new(type: :gte, value: 5), calculator: Calculator.new(type: :get_some_free, value: {5, 1})))
+
+      Store.add_adjustment_for_product(
+        "MAD",
+        "SPRITE",
+        Adjustment.new(
+          condition: Condition.new(type: :gte, value: 5),
+          calculator: Calculator.new(type: :get_some_free, value: {5, 1})
+        )
+      )
 
       cart = Cart.new() |> Cart.add_product("SPRITE", 6)
 
